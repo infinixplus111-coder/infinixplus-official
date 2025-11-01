@@ -2046,5 +2046,51 @@
             this.reset();
         });
     </script>
+<script>
+// 专为 infinixplus 网站表单修复的代码
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('contactForm');
+  
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // 显示加载状态
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = '提交中...';
+      submitBtn.disabled = true;
+
+      // 收集表单数据
+      const formData = new FormData(form);
+      
+      // 发送到 Formspree
+      fetch('https://formspree.io/f/xdkppzjv', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('贷款申请提交成功！我们会尽快联系您。');
+          form.reset();
+        } else {
+          alert('提交失败，请稍后重试。');
+        }
+      })
+      .catch(error => {
+        alert('网络错误，请检查网络连接后重试。');
+      })
+      .finally(() => {
+        // 恢复按钮状态
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      });
+    });
+  }
+});
+</script>
 </body>
 </html>
